@@ -1,0 +1,20 @@
+#!/usr/bin/env gnuplot
+
+set terminal pdfcairo font "Gill Sans,6" linewidth 3 rounded dashed size 4in,3in
+set output "plot.pdf"
+#set output "plot.png"
+
+load "common_styles.gnuplot"
+set key left top noreverse enhanced autotitles nobox
+
+set xrange [1:7]
+set log y
+
+set xlabel "List size(power of ten)"
+set ylabel "Seconds"
+
+set datafile separator ","
+plot "bench.csv" using 2:3 w lp ls 1 title "Generic list length",\
+     "bench_generic_int_sum.csv" using 2:3 w lp ls 2 title "Generic list sum",\
+     "bench_spec_int_length.csv" using 2:3 w lp ls 3 title "Specialized list length",\
+     "bench_spec_int_sum.csv" using 2:3 w lp ls 4 title "Specialized list sum"
