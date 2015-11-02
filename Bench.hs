@@ -102,7 +102,7 @@ sglSumAcc !acc (SGLCons h t) = sglSumAcc (acc + h) t
 
 data IntList
   = ILNil
-  | ILCons {-# UNPACK #-} !Int {-# UNPACK #-} !IntList
+  | ILCons {-# UNPACK #-} !Int !IntList
   deriving (Show)
 
 instance NFData IntList where
