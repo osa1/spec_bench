@@ -15,7 +15,7 @@ Now using this type and `[Int]`, we benchmark two very simple operations:
 
 1. We run `sum :: [Int] -> Int` which is simply a loop that adds up all the
    elements in the list.
-   (NOTE: `sum` in `base` is more general that we need and it's slower for this
+   (NOTE: `sum` in `base` is more general than we need and it's slower for this
    reason, so we have our own `sum` for fairness)
 
 2. We run `length :: [Int] -> Int` which measures length of the list.
@@ -111,7 +111,6 @@ time                 37.36 ms   (37.19 ms .. 37.52 ms)
 mean                 37.36 ms   (37.27 ms .. 37.44 ms)
 std dev              166.7 μs   (130.2 μs .. 208.7 μs)
 
-
 benchmarking Unboxed Int list (size: 10^7)/length
 time                 24.24 ms   (24.14 ms .. 24.32 ms)
                      1.000 R²   (1.000 R² .. 1.000 R²)
@@ -149,6 +148,11 @@ std dev              143.6 μs   (115.4 μs .. 170.4 μs)
 ```
 
 The reason `Haskell list` variant is super slow is because the type of `sum` is
-too general: `sum :: (Num a, Foldable t) => t a -> a`. This is why we
-implemented our variant `Generic list` for fairness. (TODO: Maybe talk a bit
-about code for very general `sum`)
+too general:
+
+```haskell
+sum :: (Num a, Foldable t) => t a -> a
+```
+
+This is why we implemented our variant `Generic list` for fairness. (TODO: Maybe
+talk a bit about code for very general `sum`)
