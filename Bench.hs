@@ -8,7 +8,7 @@ import Criterion.Main
 
 main :: IO ()
 main = defaultMain $ concatMap mkbench [1..7 :: Int]
--- main = defaultMain $ concatMap mkbench [6]
+-- main = defaultMain $ concatMap mkbench [7]
 
 mkbench :: Int -> [Benchmark]
 mkbench size =
@@ -73,7 +73,7 @@ glSumAcc !acc (GLCons h t) = glSumAcc (acc + h) t
 --------------------------------------------------------------------------------
 -- * Strict generic lists
 
-data SGL a = SGLNil | SGLCons !a !(SGL a)
+data SGL a = SGLNil | SGLCons !a (SGL a)
   deriving (Show)
 
 instance NFData a => NFData (SGL a) where
@@ -102,7 +102,7 @@ sglSumAcc !acc (SGLCons h t) = sglSumAcc (acc + h) t
 
 data IntList
   = ILNil
-  | ILCons {-# UNPACK #-} !Int !IntList
+  | ILCons {-# UNPACK #-} !Int IntList
   deriving (Show)
 
 instance NFData IntList where
