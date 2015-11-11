@@ -1,8 +1,9 @@
 #!/usr/bin/env gnuplot
 
+set title "Sum"
+
 set terminal pdfcairo font "Gill Sans,6" linewidth 3 rounded dashed size 4in,3in
 set output "plot_sum_nolog_nohaskell.pdf"
-#set output "plot.png"
 
 load "common_styles.gnuplot"
 set key left top noreverse enhanced autotitles nobox
