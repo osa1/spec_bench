@@ -19,7 +19,7 @@ instance NFData IntList where
   rnf (ILCons _ l) = rnf l
 
 generateSpecList :: Int -> IO IntList
-generateSpecList size = return $ mkSpecList 0 ((10 ^ size) + 1)
+generateSpecList size = return $ mkSpecList 0 (10 ^ size)
   where
     mkSpecList i b
       | i == b    = ILNil
