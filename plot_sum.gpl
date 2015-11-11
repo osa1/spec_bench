@@ -1,0 +1,19 @@
+#!/usr/bin/env gnuplot
+
+set terminal pdfcairo font "Gill Sans,6" linewidth 3 rounded dashed size 4in,3in
+set output "plot_sum_nolog_nohaskell.pdf"
+#set output "plot.png"
+
+load "common_styles.gnuplot"
+set key left top noreverse enhanced autotitles nobox
+
+set xrange [1:7]
+#set log y
+
+set xlabel "List size(power of ten)"
+set ylabel "Seconds"
+
+set datafile separator ","
+plot "bench_generic_list_sum.csv" using 2:3 w lp ls 1 title "Generic list",\
+     "bench_strict_list_sum.csv" using 2:3 w lp ls 3 title "Strict list",\
+     "bench_unboxed_list_sum.csv" using 2:3 w lp ls 4 title "Unboxed list"
