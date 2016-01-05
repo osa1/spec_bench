@@ -1,11 +1,15 @@
 open Timer
 
 fun putStrLn (str: string) = print (str ^ "\n")
-fun printLargeInt (i: LargeInt.int) = putStrLn (LargeInt.toString i)
+fun printLargeInt (i: LargeInt.int)    = putStrLn (LargeInt.toString i)
+fun printLargeReal (r: LargeReal.real) = putStrLn (LargeReal.toString r)
 
 datatype tree =
     Leaf of int
   | Node of tree * tree
+
+type micro     = LargeInt.int
+type microreal = LargeReal.real
 
 fun add1Tree (t: tree): tree =
    case t of
@@ -43,28 +47,44 @@ fun showTreePrec (p: int, t: tree): string =
              ^ showTreePrec (11, t2)
              ^ closeParen
    end
-
 fun showTree (t: tree): string = showTreePrec (0, t)
 
-fun benchmark (power: int): Time.time * Time.time * Time.time =
+fun benchmark (power: int): micro =
    let
       val t = buildTree power
-
-      val cpuTimer = startCPUTimer ()
       val realTimer = startRealTimer ()
-
       val _ = add1Tree t
-
-      val {usr = usr, sys = sys} = checkCPUTimer cpuTimer
       val realTime = checkRealTimer realTimer
    in
-      (usr, sys, realTime)
+      Time.toMicroseconds realTime
+   end
+
+fun benchmarks (power: int): microreal =
+   let
+      val _ = print "Benchmarking"
+      val iters = 10
+      fun computeTimes (its: int): micro list =
+         if its = 0
+            then []
+            else
+               let
+                  val _ = print "."
+               in
+                  benchmark power :: computeTimes (its-1)
+               end
+      val times = computeTimes iters
+      val _ = putStrLn ".Done!"
+      val timeSum = foldl LargeInt.+ 0 times
+      val meanTime = LargeReal./ ( LargeReal.fromLargeInt timeSum
+                                 , LargeReal.fromInt      iters
+                                 )
+   in
+      meanTime
    end
 
 val power = case map Int.fromString (CommandLine.arguments ()) of
                     SOME i :: _ => i
                   | _           => raise Fail "Can't parse number of iterations"
-val (usr, sys, realTime) = benchmark power
-val _ = printLargeInt (Time.toNanoseconds usr)
-val _ = printLargeInt (Time.toNanoseconds sys)
-val _ = printLargeInt (Time.toNanoseconds realTime)
+val meanTime = benchmarks power
+val _ = print "Mean time (microseconds): "
+val _ = printLargeReal meanTime
