@@ -1,3 +1,8 @@
+open Timer
+
+fun putStrLn (str: string) = print (str ^ "\n")
+fun printLargeInt (i: LargeInt.int) = putStrLn (LargeInt.toString i)
+
 datatype tree =
     Leaf of int
   | Node of tree * tree
@@ -13,7 +18,7 @@ fun buildTree (power: int): tree =
          if power = 0
             then Leaf root
             else Node ( graftTree (root, power-1)
-                      , graftTree (root + (Int.fromLarge (IntInf.pow (2, power-1))), power-1)
+                      , graftTree (root + Int.fromLarge (IntInf.pow (2, power-1)), power-1)
                       )
    in
       graftTree (1, power)
@@ -41,4 +46,25 @@ fun showTreePrec (p: int, t: tree): string =
 
 fun showTree (t: tree): string = showTreePrec (0, t)
 
-val _ = print (showTree (buildTree 5) ^ "\n")
+fun benchmark (power: int): Time.time * Time.time * Time.time =
+   let
+      val t = buildTree power
+
+      val cpuTimer = startCPUTimer ()
+      val realTimer = startRealTimer ()
+
+      val _ = add1Tree t
+
+      val {usr = usr, sys = sys} = checkCPUTimer cpuTimer
+      val realTime = checkRealTimer realTimer
+   in
+      (usr, sys, realTime)
+   end
+
+val power = case map Int.fromString (CommandLine.arguments ()) of
+                    SOME i :: _ => i
+                  | _           => raise Fail "Can't parse number of iterations"
+val (usr, sys, realTime) = benchmark power
+val _ = printLargeInt (Time.toNanoseconds usr)
+val _ = printLargeInt (Time.toNanoseconds sys)
+val _ = printLargeInt (Time.toNanoseconds realTime)
