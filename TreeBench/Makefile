@@ -1,11 +1,14 @@
 
 
-all: treebench_mlton.exe treebench_ghc.exe
+all: treebench_mlton.exe treebench_strict_ghc.exe treebench_lazy_ghc.exe
 
 treebench_mlton.exe: treebench.sml
 	time mlton -output $@ $^
 
-treebench_ghc.exe: treebench.hs
+treebench_strict_ghc.exe: treebench.hs
+	time ghc -O2 $^ -o $@
+
+treebench_lazy_ghc.exe: treebench_lazy.hs
 	time ghc -O2 $^ -o $@
 
 clean:

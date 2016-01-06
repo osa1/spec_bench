@@ -2,20 +2,27 @@
 
 module Main where
 
+import Control.DeepSeq
 import Control.Exception
 import Control.Monad
 import Data.Time.Clock
+import GHC.Generics
 import System.Environment
 
--- Strict version
+-- Lazy version
 --------------------------------------------------------------------------------
 
 data Tree = Leaf {-# UNPACK #-} !Int
-          | Node !Tree !Tree
+          | Node Tree Tree
+-- deriving Generic
+
+instance NFData Tree where
+  rnf (Leaf _) = ()
+  rnf (Node x y) = rnf x `seq` rnf y
 
 -- | Build a fully-evaluated tree
 buildTree :: Int -> IO Tree
-buildTree n = evaluate $ go 1 n
+buildTree n = evaluate $ force $ go 1 n
   where
   go root 0 = Leaf root
   go root n = Node (go root (n-1))
@@ -31,7 +38,7 @@ leftmost (Node x _) = leftmost x
 --------------------------------------------------------------------------------
 
 bench :: Tree -> IO Tree
-bench tr = evaluate (add1Tree tr)
+bench tr = evaluate $ force (add1Tree tr)
 
 main =
  do args <- getArgs
