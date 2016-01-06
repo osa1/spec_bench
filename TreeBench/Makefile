@@ -12,4 +12,4 @@ treebench_lazy_ghc.exe: treebench_lazy.hs
 	time ghc -O2 $^ -o $@
 
 clean:
-	rm -f *.exe
+	rm -f *.exe *.o *.hi treebench treebench_lazy
