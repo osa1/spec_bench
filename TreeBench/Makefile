@@ -5,10 +5,10 @@ treebench_mlton.exe: treebench.sml
 	time mlton -output $@ $^
 
 treebench_strict_ghc.exe: treebench.hs
-	time ghc -O2 $^ -o $@
+	time ghc -O2 -rtsopts $^ -o $@
 
 treebench_lazy_ghc.exe: treebench_lazy.hs
-	time ghc -O2 $^ -o $@
+	time ghc -O2 -rtsopts $^ -o $@
 
 treebench_ocaml.exe: treebench.ml
 	time ocamlopt.opt $^ -o $@
