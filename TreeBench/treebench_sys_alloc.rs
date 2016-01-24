@@ -1,6 +1,9 @@
 // Tested with rustc 1.8.0-nightly (d63b8e539 2016-01-23)
 
+#![feature(alloc_system)]
 #![feature(time2)]
+
+extern crate alloc_system;
 
 use std::env;
 use std::process;

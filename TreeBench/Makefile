@@ -16,5 +16,8 @@ treebench_ocaml.exe: treebench.ml
 treebench_rust.exe: treebench.rs
 	time rustc $^ -o $@ -O
 
+treebench_rust_sys_alloc.exe: treebench_sys_alloc.rs
+	time rustc $^ -o $@ -O
+
 clean:
 	rm -f *.exe *.o *.hi treebench treebench_lazy *.cmi *.cmo *.cmx
