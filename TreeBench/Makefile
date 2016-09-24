@@ -1,5 +1,5 @@
 all: treebench_mlton.exe treebench_strict_ghc.exe treebench_lazy_ghc.exe treebench_ocaml.exe \
-     treebench_rust.exe
+     treebench_rust.exe treebench_rust_sys_alloc.exe
 
 treebench_mlton.exe: treebench.sml
 	time mlton -output $@ $^
