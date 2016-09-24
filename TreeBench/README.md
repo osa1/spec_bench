@@ -16,5 +16,11 @@ Running on my "drone" machine:
 
  * 110ms - GHC/strict, but highly variable, often 66ms (7.10.3)
  * 85ms - Rust 1.13.0 nightly (no sys alloc)
- * 
+
+[2016.09.24]
+
+On first inspection the treebench_unpacked benchmark takes 2ms on my
+laptop for 2^20.  This version uses the unpacked (preorder)
+representation, and also uses the same input/output memory again and
+again, even though it does
 

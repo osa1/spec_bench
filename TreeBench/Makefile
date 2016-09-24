@@ -1,5 +1,5 @@
 all: treebench_mlton.exe treebench_strict_ghc.exe treebench_lazy_ghc.exe treebench_ocaml.exe \
-     treebench_rust.exe treebench_rust_sys_alloc.exe
+     treebench_rust.exe treebench_rust_sys_alloc.exe treebench_rust_unpacked.exe
 
 treebench_mlton.exe: treebench.sml
 	time mlton -output $@ $^
@@ -17,6 +17,9 @@ treebench_rust.exe: treebench.rs
 	time rustc $^ -o $@ -O
 
 treebench_rust_sys_alloc.exe: treebench_sys_alloc.rs
+	time rustc $^ -o $@ -O
+
+treebench_rust_unpacked.exe: treebench_unpacked.rs
 	time rustc $^ -o $@ -O
 
 clean:
