@@ -2,6 +2,7 @@
 
 module Main where
 
+import Data.List (sort)
 import Control.DeepSeq
 import Control.Exception
 import Control.Monad
@@ -45,10 +46,15 @@ main =
     let power = case args of
                   [p] -> read p
                   _   -> error $ "Bad command line args.  Expected one number (exponent): " ++show args
-    forM_ [1..10] $ \_ -> do
+    times <- forM [1..9] $ \_ -> do
       tr  <- buildTree power
       t1  <- getCurrentTime
       tr2 <- bench tr
       t2  <- getCurrentTime
-      putStrLn $ "Test, leftmost leaf in output: " ++ show (leftmost tr2)
-      putStrLn $ "Took "++ show (diffUTCTime t2 t1)
+      -- putStrLn $ "Test, leftmost leaf in output: " ++ show (leftmost tr2)
+      -- putStrLn $ "Took "++ show (diffUTCTime t2 t1)
+      putStr "."
+      return (diffUTCTime t2 t1)
+    let sorted = sort times
+    putStrLn $ "\nAll times: " ++ show sorted
+    putStrLn $ "SELFTIMED: "++ show (sorted !! 4)

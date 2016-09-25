@@ -59,10 +59,11 @@ fun benchmark (power: int): micro =
       Time.toMicroseconds realTime
    end
 
-fun benchmarks (power: int): microreal =
+val trials = 9
+       
+fun benchmarks (power: int): (microreal * microreal) =
    let
       val _ = print "Benchmarking"
-      val iters = 10
       fun computeTimes (its: int): micro list =
          if its = 0
             then []
@@ -72,14 +73,16 @@ fun benchmarks (power: int): microreal =
                in
                   benchmark power :: computeTimes (its-1)
                end
-      val times = computeTimes iters
+      val times = computeTimes trials
       val _ = putStrLn ".Done!"
       val timeSum = foldl LargeInt.+ 0 times
       val meanTime = LargeReal./ ( LargeReal.fromLargeInt timeSum
-                                 , LargeReal.fromInt      iters
+                                 , LargeReal.fromInt      trials
                                  )
+      val sorted = FINISHME
+      val medianTime = FINISHME
    in
-      meanTime
+      (meanTime, medianTime)
    end
 
 val power = case map Int.fromString (CommandLine.arguments ()) of
@@ -87,6 +90,6 @@ val power = case map Int.fromString (CommandLine.arguments ()) of
                   | _           => raise Fail "Can't parse number of iterations"
 val _ = print "Benchmark: add 1 to all leaves of binary tree, size 2^"
 val _ = putStrLn (Int.toString power)
-val meanTime = benchmarks power
+val (meanTime,median) = benchmarks power
 val _ = print "Mean time (microseconds): "
 val _ = printLargeReal meanTime

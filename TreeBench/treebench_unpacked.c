@@ -12,6 +12,8 @@ enum Tree {
 typedef char* TreeRef;
 typedef long long Num;
 
+#define TRIALS 33
+
 // Helper function
 char* fillTree(char* cursor, int n, Num root) {
   // printf("  filltree: %p, n=%d, fill=%lld", cursor, n, root); fflush(stdout);
@@ -78,6 +80,13 @@ TreeRef add1Tree(TreeRef t, TreeRef tout) {
   }
 }
 
+int compare_doubles (const void *a, const void *b)
+{
+  const double *da = (const double *) a;
+  const double *db = (const double *) b;
+  return (*da > *db) - (*da < *db);
+}
+
 void main() {
   int depth = 20;
   printf("Building tree, depth %d\n", depth);
@@ -87,15 +96,22 @@ void main() {
   clock_t end = clock();
   double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
   printf("done building, took %lf seconds\n\n", time_spent);
-  // printTree(tr); printf("\n");
+  // printTree(tr); printf("\n");a
   TreeRef t2 = malloc(treeSize(depth));
-  for(int i=0; i<10; i++) {
+  double trials[TRIALS];
+  for(int i=0; i<TRIALS; i++) {
     begin = clock();
     add1Tree(tr,t2);
     end = clock();
     time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
     printf("  run(%d): %lf\n", i, time_spent);
-  }  
+    trials[i] = time_spent;
+  }
+  qsort(trials, TRIALS, sizeof(double), compare_doubles);
+  printf("Sorted: ");
+  for(int i=0; i<TRIALS; i++)
+    printf(" %lf", trials[i]);  
+  printf("\nSELFTIMED: %lf\n", trials[TRIALS / 2]);
   // printTree(t2); printf("\n");
   free(tr);
 }
